@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<!-- COMMON NAVIGATION -->
+
+<header class="navbar" th:fragment="navbar(activePage)">
+
+    <a href="/" class="brand">
+        <span class="brand-icon">K</span>
+        <span>KNOWLEDGE<span class="accent">VAULT</span></span>
+    </a>
+
+    <nav>
+
+        <a href="/"
+           th:classappend="${activePage == 'home'} ? ' active' : ''">
+            Home
+        </a>
+
+        <a href="/papers"
+           th:classappend="${activePage == 'papers'} ? ' active' : ''">
+            Papers
+        </a>
+
+        <a href="/researchers"
+           th:classappend="${activePage == 'researchers'} ? ' active' : ''">
+            Researchers
+        </a>
+
+        <a href="/projects"
+           th:classappend="${activePage == 'projects'} ? ' active' : ''">
+            Projects
+        </a>
+
+        <a href="/keywords"
+           th:classappend="${activePage == 'keywords'} ? ' active' : ''">
+            Keywords
+        </a>
+
+        <a href="/reviews"
+           th:classappend="${activePage == 'reviews'} ? ' active' : ''">
+            Reviews
+        </a>
+
+        <a href="/citations"
+           th:classappend="${activePage == 'citations'} ? ' active' : ''">
+            Citations
+        </a>
+
+    </nav>
+
+    <div class="nav-actions">
+
+        <button id="themeToggle"
+                class="theme-toggle"
+                type="button"
+                aria-label="Switch theme"
+                title="Switch theme">
+            &#9728;
+        </button>
+
+        <a href="/" class="nav-button">Home ↗</a>
+
+    </div>
+
+</header>
+
+
+<!-- COMMON FOOTER -->
+
+<footer th:fragment="siteFooter">
+
+    <div class="brand">
+        <span class="brand-icon">K</span>
+        <span>KNOWLEDGE<span class="accent">VAULT</span></span>
+    </div>
+
+    <p>RESEARCH KNOWLEDGE MANAGEMENT SYSTEM</p>
+
+    <p>© 2026 KNOWLEDGEVAULT</p>
+
+</footer>
+
+</body>
+</html>

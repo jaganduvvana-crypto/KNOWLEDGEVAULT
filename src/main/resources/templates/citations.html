@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Citation Network | KNOWLEDGEVAULT</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<!-- SHARED NAVIGATION -->
+<div th:replace="~{fragments :: navbar('citations')}"></div>
+
+<main class="citation-page">
+
+    <!-- PAGE HEADING -->
+
+    <section class="citation-heading">
+
+        <div class="tag">
+            RESEARCH NETWORK / CITATION ANALYSIS
+        </div>
+
+        <h1>
+            Citation <span class="accent">Network.</span>
+        </h1>
+
+        <p>
+            Explore relationships between academic publications.
+            Discover papers that cite other publications and
+            understand how research knowledge is connected.
+        </p>
+
+    </section>
+
+
+    <!-- NETWORK STATISTICS -->
+
+    <section class="citation-stats">
+
+        <div class="citation-stat-card">
+
+            <span class="stat-label">TOTAL PAPERS</span>
+
+            <strong th:text="${totalPapers}">21</strong>
+
+            <span class="stat-description">
+                Publications in repository
+            </span>
+
+        </div>
+
+        <div class="citation-stat-card">
+
+            <span class="stat-label">CITATION LINKS</span>
+
+            <strong th:text="${totalCitationLinks}">39</strong>
+
+            <span class="stat-description">
+                Recorded citation relationships
+            </span>
+
+        </div>
+
+        <div class="citation-stat-card">
+
+            <span class="stat-label">SELECTED PAPER</span>
+
+            <strong th:text="${selectedPaper != null ? selectedPaper.paper_id : '—'}">
+                1
+            </strong>
+
+            <span class="stat-description">
+                Currently exploring
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- SEARCH PAPERS -->
+
+    <section class="citation-search">
+
+        <form action="/citations"
+              method="get"
+              class="citation-search-form">
+
+            <div class="citation-search-input">
+
+                <span class="search-icon">⌕</span>
+
+                <input
+                    type="text"
+                    name="q"
+                    th:value="${searchTerm}"
+                    placeholder="Search research papers by title..."
+                    aria-label="Search papers">
+
+            </div>
+
+            <button type="submit" class="search-button">
+                Search →
+            </button>
+
+            <a href="/citations" class="clear-button">
+                Clear
+            </a>
+
+        </form>
+
+    </section>
+
+
+    <!-- NETWORK CONTENT -->
+
+    <section class="citation-layout"
+             th:if="${selectedPaper != null}">
+
+
+        <!-- LEFT: PAPER DIRECTORY -->
+
+        <aside class="citation-sidebar">
+
+            <div class="citation-sidebar-heading">
+
+                <div>
+                    <div class="tag">01 / LIBRARY</div>
+                    <h2>Research Papers</h2>
+                </div>
+
+                <span th:text="${papers.size()}">21</span>
+
+            </div>
+
+
+            <div class="citation-paper-list"
+                 th:if="${!#lists.isEmpty(papers)}">
+
+                <a class="citation-paper-item"
+                   th:each="paper : ${papers}"
+                   th:href="@{/citations(paperId=${paper.paper_id}, q=${searchTerm})}"
+                   th:classappend="${paper.paper_id == selectedPaperId} ? ' selected-paper' : ''">
+
+                    <div class="citation-paper-number">
+                        #<span th:text="${paper.paper_id}">1</span>
+                    </div>
+
+                    <div class="citation-paper-details">
+
+                        <h3 th:text="${paper.paper_title}">
+                            Research Paper Title
+                        </h3>
+
+                        <div class="citation-paper-counts">
+
+                            <span>
+                                IN:
+                                <strong th:text="${paper.incoming_citations}">0</strong>
+                            </span>
+
+                            <span>
+                                OUT:
+                                <strong th:text="${paper.outgoing_citations}">0</strong>
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <div class="citation-empty"
+                 th:if="${#lists.isEmpty(papers)}">
+
+                No matching papers found.
+
+            </div>
+
+        </aside>
+
+
+        <!-- RIGHT: SELECTED PAPER DETAILS -->
+
+        <section class="citation-main-panel">
+
+            <div class="citation-selected-header">
+
+                <div>
+                    <div class="tag">02 / SELECTED PUBLICATION</div>
+
+                    <h2 th:text="${selectedPaper.paper_title}">
+                        Research Paper Title
+                    </h2>
+                </div>
+
+                <span class="selected-paper-badge">
+                    PAPER #
+                    <span th:text="${selectedPaper.paper_id}">1</span>
+                </span>
+
+            </div>
+
+
+            <!-- CITATION RELATIONSHIPS -->
+
+            <div class="relationship-heading">
+
+                <h3>Citation Relationships</h3>
+
+                <span th:text="${relationships.size() + ' connections'}">
+                    0 connections
+                </span>
+
+            </div>
+
+
+            <div class="relationship-legend">
+
+                <span>
+                    <i class="legend-outgoing"></i>
+                    PAPERS CITED BY THIS PAPER
+                </span>
+
+                <span>
+                    <i class="legend-incoming"></i>
+                    PAPERS CITING THIS PAPER
+                </span>
+
+            </div>
+
+
+            <!-- RELATIONSHIP LIST -->
+
+            <div class="relationship-list"
+                 th:if="${!#lists.isEmpty(relationships)}">
+
+                <article class="relationship-card"
+                         th:each="relationship : ${relationships}">
+
+                    <div class="relationship-indicator"
+                         th:classappend="${relationship.relationship_type == 'CITES'} ? ' relationship-outgoing' : ' relationship-incoming'">
+
+                        <span
+                            th:text="${relationship.relationship_type == 'CITES'} ? '→' : '←'">
+                            →
+                        </span>
+
+                    </div>
+
+
+                    <div class="relationship-details">
+
+                        <div class="relationship-type"
+                             th:classappend="${relationship.relationship_type == 'CITES'} ? ' type-outgoing' : ' type-incoming'"
+                             th:text="${relationship.relationship_type}">
+                            CITES
+                        </div>
+
+                        <h4 th:text="${relationship.related_paper_title}">
+                            Related Research Paper
+                        </h4>
+
+                        <span class="related-paper-id">
+                            PAPER ID:
+                            <span th:text="${relationship.related_paper_id}">
+                                2
+                            </span>
+                        </span>
+
+                    </div>
+
+
+                    <a class="view-relationship"
+                       th:href="@{/citations(paperId=${relationship.related_paper_id})}">
+                        EXPLORE →
+                    </a>
+
+                </article>
+
+            </div>
+
+
+            <!-- NO CITATIONS -->
+
+            <div class="no-relationships"
+                 th:if="${#lists.isEmpty(relationships)}">
+
+                <div class="empty-icon">⇄</div>
+
+                <h3>No citation relationships</h3>
+
+                <p>
+                    This paper currently has no incoming or outgoing
+                    citation relationships in the database.
+                </p>
+
+            </div>
+
+
+            <!-- CITATION EXPLANATION -->
+
+            <div class="citation-information">
+
+                <div class="citation-info-icon">ⓘ</div>
+
+                <div>
+
+                    <h4>Understanding Citation Relationships</h4>
+
+                    <p>
+                        <strong>CITES:</strong> The selected paper
+                        references another paper.
+                    </p>
+
+                    <p>
+                        <strong>CITED BY:</strong> Another paper
+                        references the selected paper.
+                    </p>
+
+                    <p>
+                        Select EXPLORE on any connected paper to
+                        investigate its own citation relationships.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </section>
+
+
+    <!-- NO PAPERS -->
+
+    <section class="empty-results"
+             th:if="${selectedPaper == null}">
+
+        <div class="empty-icon">⇄</div>
+
+        <h3>No research papers available</h3>
+
+        <p>
+            No paper was found for the selected search.
+            Try another title or return to the full citation library.
+        </p>
+
+        <a href="/citations" class="primary-button">
+            View All Papers
+        </a>
+
+    </section>
+
+
+    <!-- DATABASE STATUS -->
+
+    <section class="database-information">
+
+        <div class="database-info-icon">⇄</div>
+
+        <div>
+
+            <h3>Research Citation Repository</h3>
+
+            <p>
+                Citation relationships are retrieved from the
+                KNOWLEDGEVAULT citation table using MySQL JOIN operations.
+            </p>
+
+        </div>
+
+        <span class="database-status">
+            ● MYSQL CONNECTED
+        </span>
+
+    </section>
+
+</main>
+
+
+<!-- SHARED FOOTER -->
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+
+<!-- THEME SWITCHER -->
+<script th:src="@{/js/theme.js}" defer></script>
+
+</body>
+</html>

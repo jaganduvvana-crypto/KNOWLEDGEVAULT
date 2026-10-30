@@ -1,0 +1,165 @@
+
+.project-form-container {
+    width: min(800px, 92%);
+    margin: 55px auto;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.project-form-heading {
+    margin-bottom: 30px;
+}
+
+.project-form-heading h1 {
+    color: var(--text, #f0f2f5);
+    font-size: clamp(25px, 4vw, 36px);
+    margin: 12px 0;
+}
+
+.project-form-heading p {
+    color: var(--muted, #9aa8bd);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.project-form-card {
+    background: var(--panel, #1b2029);
+    border: 1px solid var(--border, #303846);
+    border-radius: 8px;
+    padding: 32px;
+}
+
+.project-form-section-label {
+    color: #59c3d6;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-bottom: 28px;
+}
+
+.project-form-group {
+    margin-bottom: 24px;
+}
+
+.project-form-group label {
+    display: block;
+    color: var(--text, #f0f2f5);
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.project-form-group input,
+.project-form-group textarea {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    background: var(--bg, #111318);
+    color: var(--text, #f0f2f5);
+    border: 1px solid var(--border, #303846);
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.project-form-group input:focus,
+.project-form-group textarea:focus {
+    border-color: #59c3d6;
+}
+
+.project-form-group textarea {
+    resize: vertical;
+    min-height: 130px;
+    line-height: 1.7;
+}
+
+.project-form-group input::placeholder,
+.project-form-group textarea::placeholder {
+    color: var(--muted, #9aa8bd);
+    opacity: 0.8;
+}
+
+.project-form-group input[type="date"] {
+    color-scheme: dark;
+}
+
+.project-form-group small {
+    display: block;
+    color: var(--muted, #9aa8bd);
+    font-size: 10px;
+    margin-top: 8px;
+    line-height: 1.6;
+}
+
+.project-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.project-form-submit,
+.project-form-cancel {
+    padding: 13px 20px;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.project-form-submit {
+    background: #087f8c;
+    color: white;
+    border: 1px solid #087f8c;
+}
+
+.project-form-submit:hover {
+    background: #0b9baa;
+}
+
+.project-form-cancel {
+    background: transparent;
+    color: var(--text, #f0f2f5);
+    border: 1px solid var(--border, #303846);
+}
+
+.project-form-cancel:hover {
+    border-color: #59c3d6;
+    color: #59c3d6;
+}
+
+.project-form-note {
+    margin-top: 25px;
+    padding: 14px;
+    border-left: 3px solid #59c3d6;
+    background: rgba(89, 195, 214, 0.06);
+    color: var(--muted, #9aa8bd);
+    font-size: 10px;
+    line-height: 1.8;
+}
+
+@media (max-width: 600px) {
+
+    .project-form-container {
+        width: 94%;
+        margin: 35px auto;
+    }
+
+    .project-form-card {
+        padding: 20px;
+    }
+
+    .project-form-actions {
+        flex-direction: column;
+    }
+
+    .project-form-submit,
+    .project-form-cancel {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}

@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${formTitle} + ' | KNOWLEDGEVAULT'">
+        Keyword Form | KNOWLEDGEVAULT
+    </title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/keyword-management-form.css}">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+</head>
+
+<body>
+
+<div th:replace="~{fragments :: navbar('keywords')}"></div>
+
+<main class="keyword-form-container">
+
+    <section class="keyword-form-heading">
+
+        <p class="keyword-management-label">
+            DATABASE ADMINISTRATION / RESEARCH KEYWORDS
+        </p>
+
+        <h1 th:text="${formTitle}">Add Keyword</h1>
+
+        <p>
+            Enter a research keyword to organize and classify
+            academic publications in KNOWLEDGEVAULT.
+        </p>
+
+    </section>
+
+
+    <!-- ERROR MESSAGE -->
+
+    <div class="keyword-alert keyword-error"
+         th:if="${errorMessage}"
+         th:text="${errorMessage}">
+    </div>
+
+
+    <!-- KEYWORD FORM -->
+
+    <section class="keyword-form-card">
+
+        <p class="keyword-form-section-label">
+            KEYWORD INFORMATION
+        </p>
+
+        <form th:action="${formAction}" method="post">
+
+            <div class="keyword-form-group">
+
+                <label for="keywordText">KEYWORD *</label>
+
+                <input
+                    type="text"
+                    id="keywordText"
+                    name="keywordText"
+                    th:value="${keywordText}"
+                    placeholder="Enter research keyword"
+                    maxlength="100"
+                    minlength="2"
+                    required
+                    autofocus>
+
+                <small>
+                    Maximum 100 characters.
+                    Each keyword must be unique.
+                </small>
+
+            </div>
+
+
+            <div class="keyword-form-actions">
+
+                <button
+                    type="submit"
+                    class="keyword-form-submit"
+                    th:text="${isEdit} ? 'Save Changes' : 'Add Keyword'">
+                    Add Keyword
+                </button>
+
+                <a
+                    th:href="@{/keyword-management}"
+                    class="keyword-form-cancel">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+
+        <div class="keyword-form-note">
+            DATABASE NOTE: Keyword ID is generated automatically.
+            Existing paper-keyword relationships are preserved.
+            Duplicate keyword names are not permitted.
+        </div>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+</body>
+</html>

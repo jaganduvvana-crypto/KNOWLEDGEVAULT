@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KNOWLEDGEVAULT | Research Management</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<!-- COMMON NAVIGATION -->
+<div th:replace="~{fragments :: navbar('home')}"></div>
+
+<main>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <div class="tag">
+                RESEARCH KNOWLEDGE MANAGEMENT SYSTEM
+            </div>
+
+            <h1>
+                Discover Knowledge.<br>
+                <span>Connect Research.</span>
+            </h1>
+
+            <p class="hero-description">
+                A centralized platform to explore academic research,
+                discover researchers, manage research projects and
+                understand connections between scientific publications.
+            </p>
+
+            <div class="hero-actions">
+
+                <a href="#modules" class="primary-button">
+                    Explore Research →
+                </a>
+
+                <a href="#about" class="secondary-button">
+                    Learn More
+                </a>
+
+            </div>
+
+            <div class="hero-note">
+                <span class="status-dot"></span>
+                Research knowledge in one place
+            </div>
+
+        </div>
+
+        <div class="hero-visual">
+
+            <div class="main-card">
+
+                <div class="visual-top">
+                    <span>● RESEARCH OVERVIEW</span>
+                    <span>•••</span>
+                </div>
+
+                <div class="visual-symbol">⌕</div>
+
+                <h3>Explore Research</h3>
+
+                <p>
+                    Find papers, authors, keywords and citations.
+                </p>
+
+                <div class="visual-line"></div>
+
+                <div class="visual-bottom">
+                    <span>DISCOVER</span>
+                    <span>CONNECT</span>
+                    <span>LEARN</span>
+                </div>
+
+            </div>
+
+            <div class="floating-card floating-one">
+
+                <span class="floating-icon">✦</span>
+
+                <div>
+                    <strong>Research Papers</strong>
+                    <small>Discover publications</small>
+                </div>
+
+            </div>
+
+            <div class="floating-card floating-two">
+
+                <span class="floating-icon">⌘</span>
+
+                <div>
+                    <strong>Research Network</strong>
+                    <small>Explore connections</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PLATFORM MODULES -->
+
+    <section class="modules" id="modules">
+
+        <div class="section-heading">
+
+            <div class="tag">
+                ● PLATFORM FEATURES
+            </div>
+
+            <h2>Explore the Knowledge Hub</h2>
+
+            <p>
+                Access the major modules of the research management system.
+            </p>
+
+        </div>
+
+
+        <div class="module-grid">
+
+            <!-- PAPERS -->
+
+            <article class="module-card">
+
+                <div class="module-number">
+                    01 / RESEARCH
+                </div>
+
+                <div class="module-icon">
+                    ⌕
+                </div>
+
+                <h3>Research Papers</h3>
+
+                <p>
+                    Search academic papers and explore publication details,
+                    authors, keywords and abstracts.
+                </p>
+
+                <a href="/papers">
+                    Explore Papers →
+                </a>
+
+            </article>
+
+
+            <!-- RESEARCHERS -->
+
+            <article class="module-card">
+
+                <div class="module-number">
+                    02 / PEOPLE
+                </div>
+
+                <div class="module-icon">
+                    ♙
+                </div>
+
+                <h3>Researchers</h3>
+
+                <p>
+                    Discover researcher profiles, institutions,
+                    research areas and publication contributions.
+                </p>
+
+                <a href="/researchers">
+                    View Researchers →
+                </a>
+
+            </article>
+
+
+            <!-- PROJECTS -->
+
+            <article class="module-card">
+
+                <div class="module-number">
+                    03 / PROJECTS
+                </div>
+
+                <div class="module-icon">
+                    ▤
+                </div>
+
+                <h3>Research Projects</h3>
+
+                <p>
+                    Explore research projects, participating
+                    researchers and collaboration roles.
+                </p>
+
+                <a href="/projects">
+                    View Projects →
+                </a>
+
+            </article>
+
+
+            <!-- CITATIONS -->
+
+            <article class="module-card">
+
+                <div class="module-number">
+                    04 / NETWORK
+                </div>
+
+                <div class="module-icon">
+                    ⇄
+                </div>
+
+                <h3>Citation Network</h3>
+
+                <p>
+                    Understand citation relationships and discover
+                    connections between academic publications.
+                </p>
+
+                <a href="/citations">
+                    Explore Citations →
+                </a>
+
+            </article>
+
+
+            <!-- KEYWORDS -->
+
+            <article class="module-card">
+
+                <div class="module-number">
+                    05 / DISCOVERY
+                </div>
+
+                <div class="module-icon">
+                    #
+                </div>
+
+                <h3>Keyword Discovery</h3>
+
+                <p>
+                    Discover research topics and find publications
+                    through associated keywords.
+                </p>
+
+                <a href="/keywords">
+                    Explore Keywords →
+                </a>
+
+            </article>
+
+
+            <!-- REVIEWS -->
+
+            <article class="module-card">
+
+                <div class="module-number">
+                    06 / EVALUATION
+                </div>
+
+                <div class="module-icon">
+                    ★
+                </div>
+
+                <h3>Paper Reviews</h3>
+
+                <p>
+                    Explore reviewer feedback, paper ratings,
+                    comments and evaluation records.
+                </p>
+
+                <a href="/reviews">
+                    View Reviews →
+                </a>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- ABOUT SECTION -->
+
+    <section class="about" id="about">
+
+        <div class="tag">
+            ● ABOUT THE PLATFORM
+        </div>
+
+        <h2>Organizing Research for Better Discovery</h2>
+
+        <p>
+            KNOWLEDGEVAULT is a centralized research knowledge
+            management system that connects researchers, research
+            papers, publication venues, research areas, projects,
+            keywords, citations and paper reviews.
+
+            It uses a relational database to organize academic
+            information and provide efficient research discovery.
+        </p>
+
+    </section>
+
+</main>
+
+
+<!-- COMMON FOOTER -->
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+
+<!-- THEME SWITCHER -->
+<script th:src="@{/js/theme.js}" defer></script>
+
+</body>
+</html>

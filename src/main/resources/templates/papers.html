@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Research Papers | KNOWLEDGEVAULT</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments :: navbar('papers')}"></div>
+
+<main class="paper-page">
+
+    <section class="paper-heading">
+
+        <div>
+            <div class="tag">RESEARCH LIBRARY / PUBLICATIONS</div>
+
+            <h1>Research <span class="accent">Papers.</span></h1>
+
+            <p>
+                Explore academic publications, discover authors,
+                find research keywords and examine publication details.
+            </p>
+        </div>
+
+        <a href="/paper-management" class="manage-paper-button">
+            <span>+</span> MANAGE PAPERS
+            <span class="manage-button-arrow">↗</span>
+        </a>
+
+    </section>
+
+
+    <section class="paper-search">
+
+        <form action="/papers" method="get" class="search-form">
+
+            <div class="search-input-wrapper">
+
+                <span class="search-icon">⌕</span>
+
+                <input
+                    type="text"
+                    name="q"
+                    th:value="${searchTerm}"
+                    placeholder="Search by paper title or keyword..."
+                    aria-label="Search research papers">
+
+            </div>
+
+            <button type="submit" class="search-button">
+                Search →
+            </button>
+
+            <a href="/papers" class="clear-button">Clear</a>
+
+        </form>
+
+        <div class="search-information">
+
+            <span>DATABASE: KNOWLEDGEVAULT_DB</span>
+
+            <span>
+                MATCHING PAPERS:
+                <strong th:text="${totalPapers}">0</strong>
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <section class="paper-results-section">
+
+        <div class="results-heading">
+
+            <div>
+                <div class="tag">● PUBLICATION RECORDS</div>
+                <h2>Available Research</h2>
+            </div>
+
+            <span class="results-count"
+                  th:text="${totalPapers + ' results'}">
+                0 results
+            </span>
+
+        </div>
+
+
+        <div class="paper-grid"
+             th:if="${!#lists.isEmpty(papers)}">
+
+            <article class="paper-card"
+                     th:each="paper : ${papers}">
+
+                <div class="paper-card-top">
+
+                    <span class="paper-id">
+                        PAPER ID:
+                        <span th:text="${paper.paper_id}">1</span>
+                    </span>
+
+                    <span class="paper-type"
+                          th:text="${paper.venue_type}">
+                        JOURNAL
+                    </span>
+
+                </div>
+
+                <h3 th:text="${paper.paper_title}">
+                    Research Paper Title
+                </h3>
+
+                <div class="paper-divider"></div>
+
+                <div class="paper-information">
+
+                    <div class="information-label">
+                        PUBLICATION DATE
+                    </div>
+
+                    <div class="information-value"
+                         th:text="${paper.publication_date}">
+                        15 Feb 2024
+                    </div>
+
+                </div>
+
+                <div class="paper-information">
+
+                    <div class="information-label">
+                        PUBLICATION VENUE
+                    </div>
+
+                    <div class="information-value"
+                         th:text="${paper.venue_name}">
+                        Research Journal
+                    </div>
+
+                </div>
+
+                <div class="paper-information">
+
+                    <div class="information-label">AUTHORS</div>
+
+                    <div class="information-value authors-value"
+                         th:text="${paper.authors}">
+                        Author names
+                    </div>
+
+                </div>
+
+                <div class="paper-keywords-section">
+
+                    <div class="information-label">
+                        RESEARCH KEYWORDS
+                    </div>
+
+                    <div class="keyword-list"
+                         th:text="${paper.keywords}">
+                        Research keywords
+                    </div>
+
+                </div>
+
+                <div class="paper-abstract">
+
+                    <div class="information-label">ABSTRACT</div>
+
+                    <p th:text="${paper.paper_abstract}">
+                        Paper abstract appears here.
+                    </p>
+
+                </div>
+
+                <div class="paper-card-footer">
+
+                    <span>KNOWLEDGEVAULT RECORD</span>
+
+                    <span class="record-status">● AVAILABLE</span>
+
+                </div>
+
+                <div class="paper-detail-actions">
+
+                    <a class="paper-detail-link"
+                       th:href="@{/papers/{id}(id=${paper.paper_id})}">
+                        VIEW FULL DETAILS →
+                    </a>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <div class="empty-results"
+             th:if="${#lists.isEmpty(papers)}">
+
+            <div class="empty-icon">⌕</div>
+
+            <h3>No research papers found</h3>
+
+            <p>
+                No matching publication was found.
+                Try another paper title or research keyword.
+            </p>
+
+            <a href="/papers" class="primary-button">
+                View All Papers
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <section class="database-information">
+
+        <div class="database-info-icon">▤</div>
+
+        <div>
+            <h3>Centralized Research Repository</h3>
+
+            <p>
+                Publication information is retrieved dynamically
+                from the KNOWLEDGEVAULT relational database.
+            </p>
+        </div>
+
+        <span class="database-status">● MYSQL CONNECTED</span>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+<script th:src="@{/js/theme.js}" defer></script>
+
+</body>
+</html>

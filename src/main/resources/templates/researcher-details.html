@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${researcher.full_name + ' | KNOWLEDGEVAULT'}">
+        Researcher Profile | KNOWLEDGEVAULT
+    </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<!-- SHARED NAVIGATION -->
+<div th:replace="~{fragments :: navbar('researchers')}"></div>
+
+<main class="researcher-detail-page">
+
+    <a href="/researchers" class="back-link">
+        ← BACK TO RESEARCHER DIRECTORY
+    </a>
+
+
+    <!-- PROFILE HEADER -->
+
+    <section class="researcher-profile-header">
+
+        <div class="profile-avatar">
+            <span th:text="${#strings.substring(researcher.full_name, 0, 1)}">
+                A
+            </span>
+        </div>
+
+        <div class="profile-main-info">
+
+            <div class="tag">RESEARCH COMMUNITY / PROFILE</div>
+
+            <div class="profile-id">
+                RESEARCHER ID:
+                <span th:text="${researcher.researcher_id}">1</span>
+            </div>
+
+            <h1 th:text="${researcher.full_name}">
+                Researcher Name
+            </h1>
+
+            <p class="profile-institution"
+               th:text="${researcher.institution}">
+                University Name
+            </p>
+
+            <p class="profile-email"
+               th:text="${researcher.email}">
+                researcher@example.com
+            </p>
+
+        </div>
+
+        <div class="profile-status">
+            <span class="status-dot"></span>
+            REGISTERED RESEARCHER
+        </div>
+
+    </section>
+
+
+    <!-- PROFILE STATISTICS -->
+
+    <section class="researcher-detail-stats">
+
+        <div class="detail-stat-card">
+
+            <span>AUTHORED PAPERS</span>
+
+            <strong th:text="${researcher.total_papers}">
+                6
+            </strong>
+
+            <small>Published research contributions</small>
+
+        </div>
+
+        <div class="detail-stat-card">
+
+            <span>PROJECTS</span>
+
+            <strong th:text="${researcher.total_projects}">
+                2
+            </strong>
+
+            <small>Research project participation</small>
+
+        </div>
+
+        <div class="detail-stat-card">
+
+            <span>SUBMITTED REVIEWS</span>
+
+            <strong th:text="${researcher.total_reviews}">
+                1
+            </strong>
+
+            <small>Academic review contributions</small>
+
+        </div>
+
+    </section>
+
+
+    <!-- RESEARCH INTERESTS -->
+
+    <section class="researcher-detail-section">
+
+        <div class="detail-section-heading">
+
+            <div class="tag">01 / SPECIALIZATION</div>
+
+            <h2>Research Areas</h2>
+
+        </div>
+
+        <div class="research-area-panel"
+             th:text="${researcher.research_areas}">
+            Database Systems, Information Retrieval
+        </div>
+
+    </section>
+
+
+    <!-- PUBLICATIONS -->
+
+    <section class="researcher-detail-section">
+
+        <div class="detail-section-heading">
+
+            <div class="tag">02 / PUBLICATIONS</div>
+
+            <h2>Published Research Papers</h2>
+
+            <span class="section-count"
+                  th:text="${authoredPapers.size() + ' papers'}">
+                6 papers
+            </span>
+
+        </div>
+
+
+        <div class="researcher-publication-list"
+             th:if="${!#lists.isEmpty(authoredPapers)}">
+
+            <article class="researcher-publication-card"
+                     th:each="paper : ${authoredPapers}">
+
+                <div class="publication-id">
+                    PAPER #
+                    <span th:text="${paper.paper_id}">1</span>
+                </div>
+
+                <h3 th:text="${paper.paper_title}">
+                    Research Paper Title
+                </h3>
+
+                <div class="publication-metadata">
+
+                    <span>
+                        PUBLICATION DATE:
+                        <strong th:text="${paper.publication_date}">
+                            15 Feb 2024
+                        </strong>
+                    </span>
+
+                    <span>
+                        AUTHOR ORDER:
+                        <strong th:text="${paper.author_order}">
+                            1
+                        </strong>
+                    </span>
+
+                </div>
+
+                <p class="publication-venue"
+                   th:text="${paper.venue_name}">
+                    Journal of Database Studies
+                </p>
+
+                <a class="publication-link"
+                   th:href="@{/papers/{id}(id=${paper.paper_id})}">
+                    VIEW PAPER DETAILS →
+                </a>
+
+            </article>
+
+        </div>
+
+
+        <div class="detail-empty"
+             th:if="${#lists.isEmpty(authoredPapers)}">
+
+            <div class="empty-icon">▤</div>
+
+            <h3>No published papers</h3>
+
+            <p>
+                This researcher has not authored any research
+                papers in the current database.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROJECT PARTICIPATION -->
+
+    <section class="researcher-detail-section">
+
+        <div class="detail-section-heading">
+
+            <div class="tag">03 / COLLABORATION</div>
+
+            <h2>Research Projects</h2>
+
+            <span class="section-count"
+                  th:text="${projects.size() + ' projects'}">
+                2 projects
+            </span>
+
+        </div>
+
+
+        <div class="researcher-project-list"
+             th:if="${!#lists.isEmpty(projects)}">
+
+            <article class="researcher-project-card"
+                     th:each="project : ${projects}">
+
+                <div class="project-detail-icon">▤</div>
+
+                <div class="researcher-project-content">
+
+                    <span class="publication-id">
+                        PROJECT #
+                        <span th:text="${project.project_id}">1</span>
+                    </span>
+
+                    <h3 th:text="${project.project_title}">
+                        Research Project
+                    </h3>
+
+                    <p>
+                        MEMBER ROLE:
+                        <strong th:text="${project.member_role}">
+                            Researcher
+                        </strong>
+                    </p>
+
+                    <div class="publication-metadata">
+
+                        <span>
+                            START:
+                            <strong th:text="${project.start_date}">
+                                01 Jan 2026
+                            </strong>
+                        </span>
+
+                        <span>
+                            END:
+                            <strong th:text="${project.end_date}">
+                                Not specified
+                            </strong>
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <div class="detail-empty"
+             th:if="${#lists.isEmpty(projects)}">
+
+            <div class="empty-icon">▤</div>
+
+            <h3>No project participation</h3>
+
+            <p>
+                This researcher is not currently assigned
+                to any research project.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- REVIEW CONTRIBUTIONS -->
+
+    <section class="researcher-detail-section">
+
+        <div class="detail-section-heading">
+
+            <div class="tag">04 / EVALUATION</div>
+
+            <h2>Review Contributions</h2>
+
+            <span class="section-count"
+                  th:text="${reviews.size() + ' reviews'}">
+                1 review
+            </span>
+
+        </div>
+
+
+        <div class="researcher-review-list"
+             th:if="${!#lists.isEmpty(reviews)}">
+
+            <article class="researcher-review-card"
+                     th:each="review : ${reviews}">
+
+                <div class="researcher-review-header">
+
+                    <span class="publication-id">
+                        REVIEW #
+                        <span th:text="${review.review_id}">
+                            1
+                        </span>
+                    </span>
+
+                    <span th:text="${review.review_date}">
+                        10 Feb 2026
+                    </span>
+
+                </div>
+
+                <h3 th:text="${review.paper_title}">
+                    Research Paper Title
+                </h3>
+
+                <div class="profile-review-rating">
+
+                    <span th:each="star : ${#numbers.sequence(1, 5)}"
+                          th:class="${star <= review.rating} ? 'star-filled' : 'star-empty'">
+                        ★
+                    </span>
+
+                    <strong th:text="${review.rating + '/5'}">
+                        5/5
+                    </strong>
+
+                </div>
+
+                <p th:text="${review.review_text}">
+                    Review comment
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <div class="detail-empty"
+             th:if="${#lists.isEmpty(reviews)}">
+
+            <div class="empty-icon">★</div>
+
+            <h3>No review contributions</h3>
+
+            <p>
+                This researcher has not submitted any paper reviews.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <a href="/researchers" class="back-link bottom-back-link">
+        ← RETURN TO RESEARCHER DIRECTORY
+    </a>
+
+</main>
+
+
+<!-- SHARED FOOTER -->
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+<script th:src="@{/js/theme.js}" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Keyword Discovery | KNOWLEDGEVAULT</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments :: navbar('keywords')}"></div>
+
+<main class="keyword-page">
+
+    <!-- PAGE HEADING -->
+
+    <section class="keyword-heading">
+
+        <div class="keyword-heading-content">
+
+            <div class="tag">
+                RESEARCH DISCOVERY / KEYWORD EXPLORER
+            </div>
+
+            <h1>
+                Discover by <span class="accent">Keywords.</span>
+            </h1>
+
+            <p>
+                Explore research topics, discover related academic publications
+                and identify connections between different research areas.
+                All keyword information is retrieved from the KNOWLEDGEVAULT
+                relational database.
+            </p>
+
+        </div>
+
+        <a href="/keyword-management"
+           class="manage-keyword-button">
+            <span>+</span> MANAGE KEYWORDS
+            <span class="manage-keyword-arrow">↗</span>
+        </a>
+
+    </section>
+
+
+    <!-- STATISTICS -->
+
+    <section class="keyword-stats">
+
+        <div class="keyword-stat-card">
+
+            <span class="stat-label">TOTAL KEYWORDS</span>
+
+            <strong th:text="${totalKeywords}">12</strong>
+
+            <span class="stat-description">
+                Registered research topics
+            </span>
+
+        </div>
+
+        <div class="keyword-stat-card">
+
+            <span class="stat-label">PAPER CONNECTIONS</span>
+
+            <strong th:text="${totalRelationships}">41</strong>
+
+            <span class="stat-description">
+                Paper and keyword relationships
+            </span>
+
+        </div>
+
+        <div class="keyword-stat-card">
+
+            <span class="stat-label">MATCHING PAPERS</span>
+
+            <strong th:text="${matchingPapers}">0</strong>
+
+            <span class="stat-description">
+                Papers connected to matching keywords
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- SEARCH SECTION -->
+
+    <section class="keyword-search">
+
+        <form action="/keywords"
+              method="get"
+              class="keyword-search-form">
+
+            <div class="keyword-search-input">
+
+                <span class="search-icon">⌕</span>
+
+                <input
+                    type="text"
+                    name="q"
+                    th:value="${searchTerm}"
+                    placeholder="Search keyword or related paper title..."
+                    aria-label="Search research keywords">
+
+            </div>
+
+            <button type="submit" class="search-button">
+                Search →
+            </button>
+
+            <a href="/keywords" class="clear-button">
+                Clear
+            </a>
+
+        </form>
+
+        <div class="search-information">
+
+            <span>DATABASE: KNOWLEDGEVAULT_DB</span>
+
+            <span>
+                MATCHING KEYWORDS:
+                <strong th:text="${keywords.size()}">12</strong>
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- KEYWORD DIRECTORY -->
+
+    <section class="keyword-results">
+
+        <div class="results-heading">
+
+            <div>
+                <div class="tag">● RESEARCH TOPICS</div>
+                <h2>Keyword Directory</h2>
+            </div>
+
+            <span class="results-count"
+                  th:text="${keywords.size() + ' keywords'}">
+                12 keywords
+            </span>
+
+        </div>
+
+
+        <!-- KEYWORD CARDS -->
+
+        <div class="keyword-grid"
+             th:if="${!#lists.isEmpty(keywords)}">
+
+            <article class="keyword-card"
+                     th:each="keyword : ${keywords}">
+
+                <div class="keyword-card-top">
+
+                    <span class="keyword-id">
+                        KEYWORD #
+                        <span th:text="${keyword.keyword_id}">1</span>
+                    </span>
+
+                    <span class="keyword-symbol">#</span>
+
+                </div>
+
+
+                <h3 th:text="${keyword.keyword_text}">
+                    Database Systems
+                </h3>
+
+
+                <div class="keyword-divider"></div>
+
+
+                <div class="keyword-paper-count">
+
+                    <div>
+                        <strong th:text="${keyword.total_papers}">
+                            0
+                        </strong>
+
+                        <span>RELATED PAPERS</span>
+                    </div>
+
+                    <span class="keyword-status">
+                        ● REGISTERED
+                    </span>
+
+                </div>
+
+
+                <div class="related-papers-section">
+
+                    <span class="information-label">
+                        CONNECTED PUBLICATIONS
+                    </span>
+
+                    <p th:text="${keyword.related_papers}">
+                        Related research papers
+                    </p>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <!-- EMPTY RESULTS -->
+
+        <div class="empty-results"
+             th:if="${#lists.isEmpty(keywords)}">
+
+            <div class="empty-icon">#</div>
+
+            <h3>No keywords found</h3>
+
+            <p>
+                No matching research keyword or related paper was found.
+                Try another search term.
+            </p>
+
+            <a href="/keywords" class="primary-button">
+                View All Keywords
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- DATABASE INFORMATION -->
+
+    <section class="database-information">
+
+        <div class="database-info-icon">#</div>
+
+        <div>
+
+            <h3>Research Keyword Repository</h3>
+
+            <p>
+                Keywords and their associated publications are retrieved
+                directly from the KNOWLEDGEVAULT database using
+                relational JOIN operations.
+            </p>
+
+        </div>
+
+        <span class="database-status">
+            ● MYSQL CONNECTED
+        </span>
+
+    </section>
+
+</main>
+
+
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+<script th:src="@{/js/theme.js}" defer></script>
+
+</body>
+</html>

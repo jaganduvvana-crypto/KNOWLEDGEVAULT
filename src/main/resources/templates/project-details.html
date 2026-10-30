@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${project.project_title + ' | KNOWLEDGEVAULT'}">
+        Project Details | KNOWLEDGEVAULT
+    </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments :: navbar('projects')}"></div>
+
+<main class="project-detail-page">
+
+    <a href="/projects" class="back-link">
+        ← BACK TO RESEARCH PROJECTS
+    </a>
+
+
+    <!-- PROJECT HEADER -->
+
+    <section class="project-detail-header">
+
+        <div class="tag">RESEARCH PROJECT / FULL RECORD</div>
+
+        <div class="project-id">
+            PROJECT ID:
+            <span th:text="${project.project_id}">1</span>
+        </div>
+
+        <h1 th:text="${project.project_title}">
+            Research Project Title
+        </h1>
+
+        <span class="project-status"
+              th:classappend="${project.project_status == 'ONGOING'} ? ' status-ongoing' : (${project.project_status == 'UPCOMING'} ? ' status-upcoming' : ' status-completed')"
+              th:text="${project.project_status}">
+            ONGOING
+        </span>
+
+    </section>
+
+
+    <!-- PROJECT DESCRIPTION -->
+
+    <section class="project-detail-section">
+
+        <div class="detail-section-heading">
+            <div class="tag">01 / OVERVIEW</div>
+            <h2>Project Description</h2>
+        </div>
+
+        <p class="project-full-description"
+           th:text="${project.project_description}">
+            Project description
+        </p>
+
+    </section>
+
+
+    <!-- PROJECT TIMELINE -->
+
+    <section class="project-detail-section">
+
+        <div class="detail-section-heading">
+            <div class="tag">02 / TIMELINE</div>
+            <h2>Project Timeline</h2>
+        </div>
+
+        <div class="project-timeline-grid">
+
+            <div class="project-timeline-card">
+
+                <span>START DATE</span>
+
+                <strong th:text="${project.start_date}">
+                    01 Jan 2025
+                </strong>
+
+            </div>
+
+            <div class="project-timeline-card">
+
+                <span>END DATE</span>
+
+                <strong th:text="${project.end_date}">
+                    30 Jun 2026
+                </strong>
+
+            </div>
+
+            <div class="project-timeline-card">
+
+                <span>PROJECT STATUS</span>
+
+                <strong th:text="${project.project_status}">
+                    ONGOING
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROJECT STATISTICS -->
+
+    <section class="project-detail-section">
+
+        <div class="detail-section-heading">
+            <div class="tag">03 / PROJECT STATISTICS</div>
+            <h2>Project Overview</h2>
+        </div>
+
+        <div class="project-overview-grid">
+
+            <div class="project-overview-card">
+
+                <span>TOTAL TEAM MEMBERS</span>
+
+                <strong th:text="${project.total_members}">
+                    4
+                </strong>
+
+            </div>
+
+            <div class="project-overview-card">
+
+                <span>ASSOCIATED PAPERS</span>
+
+                <strong th:text="${project.related_papers}">
+                    5
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROJECT TEAM -->
+
+    <section class="project-detail-section">
+
+        <div class="detail-section-heading">
+
+            <div class="tag">04 / COLLABORATION</div>
+
+            <h2>Project Team Members</h2>
+
+            <span class="section-count"
+                  th:text="${members.size() + ' members'}">
+                4 members
+            </span>
+
+        </div>
+
+
+        <div class="project-member-grid"
+             th:if="${!#lists.isEmpty(members)}">
+
+            <article class="project-member-card"
+                     th:each="member : ${members}">
+
+                <div class="project-member-avatar">
+
+                    <span th:text="${#strings.substring(member.full_name, 0, 1)}">
+                        A
+                    </span>
+
+                </div>
+
+                <h3 th:text="${member.full_name}">
+                    Researcher Name
+                </h3>
+
+                <span class="project-member-role"
+                      th:text="${member.member_role}">
+                    Project Lead
+                </span>
+
+                <p th:text="${member.institution}">
+                    University Name
+                </p>
+
+                <span class="project-member-email"
+                      th:text="${member.email}">
+                    researcher@example.com
+                </span>
+
+                <div class="member-paper-count">
+
+                    <strong th:text="${member.authored_papers}">
+                        2
+                    </strong>
+
+                    <span>AUTHORED PAPERS</span>
+
+                </div>
+
+                <a th:href="@{/researchers/{id}(id=${member.researcher_id})}"
+                   class="member-profile-link">
+                    VIEW PROFILE →
+                </a>
+
+            </article>
+
+        </div>
+
+
+        <div class="detail-empty"
+             th:if="${#lists.isEmpty(members)}">
+
+            <h3>No team members assigned</h3>
+
+            <p>This project currently has no assigned researchers.</p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ASSOCIATED PUBLICATIONS -->
+
+    <section class="project-detail-section">
+
+        <div class="detail-section-heading">
+
+            <div class="tag">05 / PUBLICATIONS</div>
+
+            <h2>Publications by Project Members</h2>
+
+            <span class="section-count"
+                  th:text="${publications.size() + ' papers'}">
+                5 papers
+            </span>
+
+        </div>
+
+
+        <div class="project-publication-list"
+             th:if="${!#lists.isEmpty(publications)}">
+
+            <article class="project-publication-card"
+                     th:each="publication : ${publications}">
+
+                <div class="publication-id">
+                    PAPER #
+                    <span th:text="${publication.paper_id}">1</span>
+                </div>
+
+                <h3 th:text="${publication.paper_title}">
+                    Research Paper Title
+                </h3>
+
+                <p th:text="${publication.venue_name}">
+                    Journal of Database Studies
+                </p>
+
+                <div class="publication-metadata">
+
+                    <span>
+                        DATE:
+                        <strong th:text="${publication.publication_date}">
+                            15 Feb 2024
+                        </strong>
+                    </span>
+
+                </div>
+
+                <a th:href="@{/papers/{id}(id=${publication.paper_id})}"
+                   class="publication-link">
+                    VIEW PAPER →
+                </a>
+
+            </article>
+
+        </div>
+
+
+        <div class="detail-empty"
+             th:if="${#lists.isEmpty(publications)}">
+
+            <h3>No associated publications</h3>
+
+            <p>
+                No papers authored by this project's team members
+                were found in the current database.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <a href="/projects" class="back-link">
+        ← RETURN TO PROJECT DIRECTORY
+    </a>
+
+</main>
+
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+<script th:src="@{/js/theme.js}" defer></script>
+
+</body>
+</html>

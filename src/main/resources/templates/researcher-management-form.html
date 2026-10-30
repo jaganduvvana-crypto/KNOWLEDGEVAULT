@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${formTitle} + ' | KNOWLEDGEVAULT'">
+        Researcher Form | KNOWLEDGEVAULT
+    </title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/researcher-management.css}">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+
+    <style>
+        .researcher-form-container {
+            width: min(760px, 92%);
+            margin: 55px auto;
+        }
+
+        .form-heading {
+            margin-bottom: 30px;
+        }
+
+        .form-heading h1 {
+            color: var(--text, #f0f2f5);
+            font-size: clamp(25px, 4vw, 36px);
+            margin: 12px 0;
+        }
+
+        .form-heading p {
+            color: var(--muted, #9aa8bd);
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .researcher-form-card {
+            background: var(--panel, #1b2029);
+            border: 1px solid var(--border, #303846);
+            border-radius: 8px;
+            padding: 32px;
+        }
+
+        .form-section-label {
+            color: #59c3d6;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            margin-bottom: 25px;
+        }
+
+        .researcher-form-group {
+            margin-bottom: 23px;
+        }
+
+        .researcher-form-group label {
+            display: block;
+            color: var(--text, #f0f2f5);
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .researcher-form-group input {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px;
+            background: var(--bg, #111318);
+            color: var(--text, #f0f2f5);
+            border: 1px solid var(--border, #303846);
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 12px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .researcher-form-group input:focus {
+            border-color: #59c3d6;
+        }
+
+        .researcher-form-group input::placeholder {
+            color: var(--muted, #9aa8bd);
+            opacity: 0.8;
+        }
+
+        .researcher-form-group small {
+            display: block;
+            color: var(--muted, #9aa8bd);
+            font-size: 10px;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        .researcher-form-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .researcher-submit-button,
+        .researcher-cancel-button {
+            padding: 13px 20px;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .researcher-submit-button {
+            background: #087f8c;
+            color: white;
+            border: 1px solid #087f8c;
+        }
+
+        .researcher-submit-button:hover {
+            background: #0b9baa;
+        }
+
+        .researcher-cancel-button {
+            background: transparent;
+            color: var(--text, #f0f2f5);
+            border: 1px solid var(--border, #303846);
+        }
+
+        .researcher-cancel-button:hover {
+            border-color: #59c3d6;
+            color: #59c3d6;
+        }
+
+        .researcher-form-note {
+            margin-top: 25px;
+            padding: 14px;
+            border-left: 3px solid #59c3d6;
+            background: rgba(89, 195, 214, 0.06);
+            color: var(--muted, #9aa8bd);
+            font-size: 10px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 600px) {
+            .researcher-form-card {
+                padding: 20px;
+            }
+
+            .researcher-form-actions {
+                flex-direction: column;
+            }
+
+            .researcher-submit-button,
+            .researcher-cancel-button {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div th:replace="~{fragments :: navbar('researchers')}"></div>
+
+<main class="researcher-form-container">
+
+    <section class="form-heading">
+
+        <p class="management-label">
+            DATABASE ADMINISTRATION / RESEARCHERS
+        </p>
+
+        <h1 th:text="${formTitle}">Add Researcher</h1>
+
+        <p>
+            Enter the researcher information below.
+            All three fields are required.
+        </p>
+
+    </section>
+
+
+    <div class="management-alert error-alert"
+         th:if="${errorMessage}"
+         th:text="${errorMessage}">
+    </div>
+
+
+    <section class="researcher-form-card">
+
+        <p class="form-section-label">RESEARCHER INFORMATION</p>
+
+        <form th:action="@{${formAction}}" method="post">
+
+            <div class="researcher-form-group">
+
+                <label for="fullName">FULL NAME *</label>
+
+                <input
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    th:value="${fullName}"
+                    placeholder="Enter researcher's full name"
+                    maxlength="120"
+                    minlength="2"
+                    required>
+
+                <small>
+                    Maximum 120 characters.
+                </small>
+
+            </div>
+
+
+            <div class="researcher-form-group">
+
+                <label for="email">EMAIL ADDRESS *</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    th:value="${email}"
+                    placeholder="example@university.edu"
+                    maxlength="150"
+                    required>
+
+                <small>
+                    Each researcher must have a unique email address.
+                </small>
+
+            </div>
+
+
+            <div class="researcher-form-group">
+
+                <label for="institution">INSTITUTION *</label>
+
+                <input
+                    type="text"
+                    id="institution"
+                    name="institution"
+                    th:value="${institution}"
+                    placeholder="Enter university or research institution"
+                    maxlength="200"
+                    required>
+
+                <small>
+                    Maximum 200 characters.
+                </small>
+
+            </div>
+
+
+            <div class="researcher-form-actions">
+
+                <button type="submit"
+                        class="researcher-submit-button"
+                        th:text="${isEdit} ? 'Save Changes' : 'Add Researcher'">
+                    Add Researcher
+                </button>
+
+                <a th:href="@{/researcher-management}"
+                   class="researcher-cancel-button">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+
+        <div class="researcher-form-note">
+            DATABASE NOTE: Researcher ID is generated automatically.
+            The creation timestamp is maintained by MySQL.
+            Existing research relationships are not modified by this form.
+        </div>
+
+    </section>
+
+</main>
+
+
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+</body>
+</html>

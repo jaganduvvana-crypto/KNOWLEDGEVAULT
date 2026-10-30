@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Paper Management | KNOWLEDGEVAULT</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/paper-management.css}">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+</head>
+
+<body>
+
+<div th:replace="~{fragments :: navbar('papers')}"></div>
+
+<main class="paper-management">
+
+    <!-- PAGE HEADING -->
+
+    <section class="paper-management-heading">
+
+        <div>
+            <p class="paper-management-label">
+                DATABASE ADMINISTRATION / PUBLICATIONS
+            </p>
+
+            <h1>Paper Management</h1>
+
+            <p class="paper-management-description">
+                Manage research papers stored in the KNOWLEDGEVAULT database.
+                Add new publications, update paper information and manage records.
+            </p>
+        </div>
+
+        <a th:href="@{/paper-management/new}"
+           class="paper-add-button">
+            + Add Research Paper
+        </a>
+
+    </section>
+
+
+    <!-- SUCCESS MESSAGE -->
+
+    <div class="paper-alert paper-success"
+         th:if="${successMessage}"
+         th:text="${successMessage}">
+    </div>
+
+
+    <!-- ERROR MESSAGE -->
+
+    <div class="paper-alert paper-error"
+         th:if="${errorMessage}"
+         th:text="${errorMessage}">
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+
+    <section class="paper-summary">
+
+        <div class="paper-summary-card">
+
+            <span class="paper-summary-title">
+                TOTAL PAPERS IN DATABASE
+            </span>
+
+            <strong th:text="${totalPapers}">21</strong>
+
+            <span class="paper-summary-note">
+                Total registered research publications
+            </span>
+
+        </div>
+
+        <div class="paper-summary-card">
+
+            <span class="paper-summary-title">
+                CURRENT SEARCH RESULTS
+            </span>
+
+            <strong th:text="${#lists.size(papers)}">21</strong>
+
+            <span class="paper-summary-note">
+                Papers matching your search
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- PAPER TABLE -->
+
+    <section class="paper-table-section">
+
+        <div class="paper-table-heading">
+
+            <div>
+                <h2>Research Paper Records</h2>
+
+                <p>
+                    Search and manage your existing publications.
+                </p>
+            </div>
+
+            <span class="paper-record-count"
+                  th:text="${#lists.size(papers)} + ' RECORDS'">
+                21 RECORDS
+            </span>
+
+        </div>
+
+
+        <!-- SEARCH FORM -->
+
+        <form th:action="@{/paper-management}"
+              method="get"
+              class="paper-search-form">
+
+            <input
+                type="text"
+                name="search"
+                th:value="${searchTerm}"
+                placeholder="Search by ID, title, abstract, DOI or venue..."
+                aria-label="Search research papers">
+
+            <button type="submit">
+                Search
+            </button>
+
+            <a th:href="@{/paper-management}">
+                Clear
+            </a>
+
+        </form>
+
+
+        <!-- PAPER TABLE -->
+
+        <div class="paper-table-wrapper">
+
+            <table class="paper-management-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>PAPER TITLE</th>
+                        <th>PUBLICATION DATE</th>
+                        <th>PUBLICATION VENUE</th>
+                        <th>DOI</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr th:each="paper : ${papers}">
+
+                        <td class="paper-id"
+                            th:text="${paper.paper_id}">
+                            1
+                        </td>
+
+                        <td class="paper-title-cell"
+                            th:text="${paper.paper_title}">
+                            Research Paper Title
+                        </td>
+
+                        <td th:text="${paper.publication_date != null ? paper.publication_date : 'Not specified'}">
+                            Publication Date
+                        </td>
+
+                        <td th:text="${paper.venue_name}">
+                            Publication Venue
+                        </td>
+
+                        <td class="paper-doi"
+                            th:text="${paper.doi != null ? paper.doi : 'Not available'}">
+                            DOI
+                        </td>
+
+                        <td class="paper-actions">
+
+                            <a th:href="@{/paper-management/edit/{id}(id=${paper.paper_id})}"
+                               class="paper-edit-button">
+                                Edit
+                            </a>
+
+                            <form th:action="@{/paper-management/delete/{id}(id=${paper.paper_id})}"
+                                  method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete this paper?');">
+
+                                <button type="submit"
+                                        class="paper-delete-button">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- EMPTY SEARCH RESULTS -->
+
+                    <tr th:if="${#lists.isEmpty(papers)}">
+
+                        <td colspan="6" class="paper-empty-records">
+                            No research papers match your search.
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <p class="paper-management-footer-note">
+            KNOWLEDGEVAULT / RESEARCH PUBLICATION MANAGEMENT
+        </p>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+</body>
+</html>

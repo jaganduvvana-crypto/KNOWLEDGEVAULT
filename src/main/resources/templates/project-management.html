@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Project Management | KNOWLEDGEVAULT</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/project-management.css}">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+</head>
+
+<body>
+
+<div th:replace="~{fragments :: navbar('projects')}"></div>
+
+<main class="project-management">
+
+    <!-- PAGE HEADING -->
+
+    <section class="project-management-heading">
+
+        <div>
+            <p class="project-management-label">
+                DATABASE ADMINISTRATION / RESEARCH PROJECTS
+            </p>
+
+            <h1>Project Management</h1>
+
+            <p class="project-management-description">
+                Manage research projects stored in the KNOWLEDGEVAULT database.
+                Add projects, update project details and manage project records.
+            </p>
+        </div>
+
+        <a th:href="@{/project-management/new}"
+           class="project-add-button">
+            + Add Project
+        </a>
+
+    </section>
+
+
+    <!-- SUCCESS MESSAGE -->
+
+    <div class="project-alert project-success"
+         th:if="${successMessage}"
+         th:text="${successMessage}">
+    </div>
+
+
+    <!-- ERROR MESSAGE -->
+
+    <div class="project-alert project-error"
+         th:if="${errorMessage}"
+         th:text="${errorMessage}">
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+
+    <section class="project-summary">
+
+        <div class="project-summary-card">
+
+            <span class="project-summary-title">
+                TOTAL PROJECTS IN DATABASE
+            </span>
+
+            <strong th:text="${totalProjects}">4</strong>
+
+            <span class="project-summary-note">
+                Total registered research projects
+            </span>
+
+        </div>
+
+        <div class="project-summary-card">
+
+            <span class="project-summary-title">
+                CURRENT SEARCH RESULTS
+            </span>
+
+            <strong th:text="${#lists.size(projects)}">4</strong>
+
+            <span class="project-summary-note">
+                Projects matching your search
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROJECT TABLE -->
+
+    <section class="project-table-section">
+
+        <div class="project-table-heading">
+
+            <div>
+                <h2>Research Project Records</h2>
+
+                <p>
+                    Search and manage your existing research projects.
+                </p>
+            </div>
+
+            <span class="project-record-count"
+                  th:text="${#lists.size(projects)} + ' RECORDS'">
+                4 RECORDS
+            </span>
+
+        </div>
+
+
+        <!-- SEARCH FORM -->
+
+        <form th:action="@{/project-management}"
+              method="get"
+              class="project-search-form">
+
+            <input
+                type="text"
+                name="search"
+                th:value="${searchTerm}"
+                placeholder="Search by ID, title, description or team member..."
+                aria-label="Search research projects">
+
+            <button type="submit">
+                Search
+            </button>
+
+            <a th:href="@{/project-management}">
+                Clear
+            </a>
+
+        </form>
+
+
+        <!-- PROJECT TABLE -->
+
+        <div class="project-table-wrapper">
+
+            <table class="project-management-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>PROJECT TITLE</th>
+                        <th>START DATE</th>
+                        <th>END DATE</th>
+                        <th>TEAM MEMBERS</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr th:each="project : ${projects}">
+
+                        <td class="project-id"
+                            th:text="${project.project_id}">
+                            1
+                        </td>
+
+                        <td class="project-title-cell">
+
+                            <span th:text="${project.project_title}">
+                                Project Title
+                            </span>
+
+                            <small th:text="${project.project_description != null ? project.project_description : 'No description available'}">
+                                Project description
+                            </small>
+
+                        </td>
+
+                        <td th:text="${project.start_date}">
+                            Start Date
+                        </td>
+
+                        <td th:text="${project.end_date != null ? project.end_date : 'Ongoing'}">
+                            End Date
+                        </td>
+
+                        <td>
+                            <span class="project-member-count"
+                                  th:text="${project.member_count}">
+                                0
+                            </span>
+                        </td>
+
+                        <td class="project-actions">
+
+                            <a th:href="@{/project-management/edit/{id}(id=${project.project_id})}"
+                               class="project-edit-button">
+                                Edit
+                            </a>
+
+                            <form th:action="@{/project-management/delete/{id}(id=${project.project_id})}"
+                                  method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete this project?');">
+
+                                <button type="submit"
+                                        class="project-delete-button">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- EMPTY SEARCH RESULTS -->
+
+                    <tr th:if="${#lists.isEmpty(projects)}">
+
+                        <td colspan="6" class="project-empty-records">
+                            No research projects match your search.
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <p class="project-management-footer-note">
+            KNOWLEDGEVAULT / RESEARCH PROJECT MANAGEMENT
+        </p>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+</body>
+</html>

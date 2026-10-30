@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${formTitle} + ' | KNOWLEDGEVAULT'">
+        Paper Form | KNOWLEDGEVAULT
+    </title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/paper-management-form.css}">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+</head>
+
+<body>
+
+<div th:replace="~{fragments :: navbar('papers')}"></div>
+
+<main class="paper-form-container">
+
+    <section class="paper-form-heading">
+
+        <p class="paper-management-label">
+            DATABASE ADMINISTRATION / PUBLICATIONS
+        </p>
+
+        <h1 th:text="${formTitle}">Add Research Paper</h1>
+
+        <p>
+            Enter the research publication details below.
+            Select a publication venue from the available database records.
+        </p>
+
+    </section>
+
+
+    <!-- ERROR MESSAGE -->
+
+    <div class="paper-alert paper-error"
+         th:if="${errorMessage}"
+         th:text="${errorMessage}">
+    </div>
+
+
+    <!-- PAPER FORM -->
+
+    <section class="paper-form-card">
+
+        <p class="paper-form-section-label">
+            PUBLICATION INFORMATION
+        </p>
+
+        <form th:action="${formAction}" method="post">
+
+            <!-- PAPER TITLE -->
+
+            <div class="paper-form-group">
+
+                <label for="paperTitle">PAPER TITLE *</label>
+
+                <input
+                    type="text"
+                    id="paperTitle"
+                    name="paperTitle"
+                    th:value="${paperTitle}"
+                    placeholder="Enter the research paper title"
+                    maxlength="250"
+                    required>
+
+                <small>
+                    Maximum 250 characters.
+                </small>
+
+            </div>
+
+
+            <!-- ABSTRACT -->
+
+            <div class="paper-form-group">
+
+                <label for="paperAbstract">PAPER ABSTRACT</label>
+
+                <textarea
+                    id="paperAbstract"
+                    name="paperAbstract"
+                    th:text="${paperAbstract}"
+                    placeholder="Enter the abstract or summary of the research paper"
+                    rows="7"></textarea>
+
+                <small>
+                    Provide a short description of the research.
+                </small>
+
+            </div>
+
+
+            <!-- DOI -->
+
+            <div class="paper-form-group">
+
+                <label for="doi">DIGITAL OBJECT IDENTIFIER (DOI)</label>
+
+                <input
+                    type="text"
+                    id="doi"
+                    name="doi"
+                    th:value="${doi}"
+                    placeholder="Example: 10.1234/example.2026"
+                    maxlength="255">
+
+                <small>
+                    DOI must be unique. Leave blank if the paper has no DOI.
+                </small>
+
+            </div>
+
+
+            <!-- PUBLICATION DATE -->
+
+            <div class="paper-form-group">
+
+                <label for="publicationDate">PUBLICATION DATE</label>
+
+                <input
+                    type="date"
+                    id="publicationDate"
+                    name="publicationDate"
+                    th:value="${publicationDate}">
+
+                <small>
+                    Select the publication date, or leave it blank.
+                </small>
+
+            </div>
+
+
+            <!-- PUBLICATION VENUE -->
+
+            <div class="paper-form-group">
+
+                <label for="venueId">PUBLICATION VENUE</label>
+
+                <select
+                    id="venueId"
+                    name="venueId">
+
+                    <option value=""
+                            th:selected="${selectedVenueId == ''}">
+                        Select a publication venue
+                    </option>
+
+                    <option
+                        th:each="venue : ${venues}"
+                        th:value="${venue.venue_id}"
+                        th:selected="${selectedVenueId == #strings.toString(venue.venue_id)}"
+                        th:text="${venue.venue_name + ' (' + venue.venue_type + ')'}">
+                        Journal Name
+                    </option>
+
+                </select>
+
+                <small>
+                    Choose one of the existing journals or conferences.
+                    This field is optional.
+                </small>
+
+            </div>
+
+
+            <!-- FORM BUTTONS -->
+
+            <div class="paper-form-actions">
+
+                <button
+                    type="submit"
+                    class="paper-form-submit"
+                    th:text="${isEdit} ? 'Save Changes' : 'Add Research Paper'">
+                    Add Research Paper
+                </button>
+
+                <a
+                    th:href="@{/paper-management}"
+                    class="paper-form-cancel">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+
+        <div class="paper-form-note">
+            DATABASE NOTE: Paper ID is generated automatically.
+            The selected venue is linked using venue_id.
+            Existing author, keyword, citation and review relationships
+            are not modified by this form.
+        </div>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+</body>
+</html>

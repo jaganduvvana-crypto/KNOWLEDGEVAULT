@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Keyword Management | KNOWLEDGEVAULT</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/keyword-management.css}">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+</head>
+
+<body>
+
+<div th:replace="~{fragments :: navbar('keywords')}"></div>
+
+<main class="keyword-management">
+
+    <!-- PAGE HEADING -->
+
+    <section class="keyword-management-heading">
+
+        <div>
+            <p class="keyword-management-label">
+                DATABASE ADMINISTRATION / RESEARCH KEYWORDS
+            </p>
+
+            <h1>Keyword Management</h1>
+
+            <p class="keyword-management-description">
+                Manage research keywords stored in the KNOWLEDGEVAULT database.
+                Add new keywords, update existing terms and manage records.
+            </p>
+        </div>
+
+        <a th:href="@{/keyword-management/new}"
+           class="keyword-add-button">
+            + Add Keyword
+        </a>
+
+    </section>
+
+
+    <!-- SUCCESS MESSAGE -->
+
+    <div class="keyword-alert keyword-success"
+         th:if="${successMessage}"
+         th:text="${successMessage}">
+    </div>
+
+
+    <!-- ERROR MESSAGE -->
+
+    <div class="keyword-alert keyword-error"
+         th:if="${errorMessage}"
+         th:text="${errorMessage}">
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+
+    <section class="keyword-summary">
+
+        <div class="keyword-summary-card">
+
+            <span class="keyword-summary-title">
+                TOTAL KEYWORDS IN DATABASE
+            </span>
+
+            <strong th:text="${totalKeywords}">12</strong>
+
+            <span class="keyword-summary-note">
+                Total registered research keywords
+            </span>
+
+        </div>
+
+        <div class="keyword-summary-card">
+
+            <span class="keyword-summary-title">
+                CURRENT SEARCH RESULTS
+            </span>
+
+            <strong th:text="${#lists.size(keywords)}">12</strong>
+
+            <span class="keyword-summary-note">
+                Keywords matching your search
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- KEYWORD TABLE -->
+
+    <section class="keyword-table-section">
+
+        <div class="keyword-table-heading">
+
+            <div>
+                <h2>Research Keyword Records</h2>
+
+                <p>
+                    Search and manage keywords associated with publications.
+                </p>
+            </div>
+
+            <span class="keyword-record-count"
+                  th:text="${#lists.size(keywords)} + ' RECORDS'">
+                12 RECORDS
+            </span>
+
+        </div>
+
+
+        <!-- SEARCH FORM -->
+
+        <form th:action="@{/keyword-management}"
+              method="get"
+              class="keyword-search-form">
+
+            <input
+                type="text"
+                name="search"
+                th:value="${searchTerm}"
+                placeholder="Search by keyword ID or keyword name..."
+                aria-label="Search keywords">
+
+            <button type="submit">
+                Search
+            </button>
+
+            <a th:href="@{/keyword-management}">
+                Clear
+            </a>
+
+        </form>
+
+
+        <!-- KEYWORD TABLE -->
+
+        <div class="keyword-table-wrapper">
+
+            <table class="keyword-management-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>KEYWORD</th>
+                        <th>ASSOCIATED PAPERS</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr th:each="keyword : ${keywords}">
+
+                        <td class="keyword-id"
+                            th:text="${keyword.keyword_id}">
+                            1
+                        </td>
+
+                        <td class="keyword-name"
+                            th:text="${keyword.keyword_text}">
+                            Database Systems
+                        </td>
+
+                        <td>
+                            <span class="keyword-paper-count"
+                                  th:text="${keyword.paper_count}">
+                                0
+                            </span>
+                        </td>
+
+                        <td class="keyword-actions">
+
+                            <a th:href="@{/keyword-management/edit/{id}(id=${keyword.keyword_id})}"
+                               class="keyword-edit-button">
+                                Edit
+                            </a>
+
+                            <form th:action="@{/keyword-management/delete/{id}(id=${keyword.keyword_id})}"
+                                  method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete this keyword?');">
+
+                                <button type="submit"
+                                        class="keyword-delete-button">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- EMPTY SEARCH RESULTS -->
+
+                    <tr th:if="${#lists.isEmpty(keywords)}">
+
+                        <td colspan="4" class="keyword-empty-records">
+                            No keywords match your search.
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <p class="keyword-management-footer-note">
+            KNOWLEDGEVAULT / RESEARCH KEYWORD MANAGEMENT
+        </p>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+</body>
+</html>

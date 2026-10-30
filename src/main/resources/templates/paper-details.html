@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${paper.paper_title + ' | KNOWLEDGEVAULT'}">
+        Paper Details | KNOWLEDGEVAULT
+    </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments :: navbar('papers')}"></div>
+
+<main class="paper-detail-page">
+
+    <a href="/papers" class="back-link">
+        ← BACK TO RESEARCH PAPERS
+    </a>
+
+    <!-- PAPER HEADER -->
+
+    <section class="paper-detail-header">
+
+        <div class="tag">RESEARCH PUBLICATION / FULL RECORD</div>
+
+        <div class="detail-paper-id">
+            PAPER ID:
+            <span th:text="${paper.paper_id}">1</span>
+        </div>
+
+        <h1 th:text="${paper.paper_title}">
+            Research Paper Title
+        </h1>
+
+        <span class="paper-type"
+              th:text="${paper.venue_type}">
+            JOURNAL
+        </span>
+
+    </section>
+
+
+    <!-- PUBLICATION INFORMATION -->
+
+    <section class="detail-section">
+
+        <div class="detail-section-heading">
+            <span class="tag">01 / PUBLICATION</span>
+            <h2>Publication Information</h2>
+        </div>
+
+        <div class="detail-metadata-grid">
+
+            <div class="detail-metadata">
+                <span class="information-label">PUBLICATION DATE</span>
+                <strong th:text="${paper.publication_date}">
+                    15 Feb 2024
+                </strong>
+            </div>
+
+            <div class="detail-metadata">
+                <span class="information-label">PUBLICATION VENUE</span>
+                <strong th:text="${paper.venue_name}">
+                    Research Journal
+                </strong>
+            </div>
+
+            <div class="detail-metadata">
+                <span class="information-label">VENUE TYPE</span>
+                <strong th:text="${paper.venue_type}">
+                    Journal
+                </strong>
+            </div>
+
+            <div class="detail-metadata">
+                <span class="information-label">DOI</span>
+                <strong th:text="${paper.doi}">
+                    Not provided
+                </strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ABSTRACT -->
+
+    <section class="detail-section">
+
+        <div class="detail-section-heading">
+            <span class="tag">02 / SUMMARY</span>
+            <h2>Research Abstract</h2>
+        </div>
+
+        <p class="detail-abstract"
+           th:text="${paper.paper_abstract}">
+            Research paper abstract.
+        </p>
+
+    </section>
+
+
+    <!-- AUTHORS -->
+
+    <section class="detail-section">
+
+        <div class="detail-section-heading">
+            <span class="tag">03 / CONTRIBUTORS</span>
+            <h2>Paper Authors</h2>
+        </div>
+
+        <div class="detail-text-panel"
+             th:text="${paper.authors}">
+            Research authors
+        </div>
+
+    </section>
+
+
+    <!-- KEYWORDS -->
+
+    <section class="detail-section">
+
+        <div class="detail-section-heading">
+            <span class="tag">04 / DISCOVERY</span>
+            <h2>Research Keywords</h2>
+        </div>
+
+        <div class="detail-text-panel keyword-detail-text"
+             th:text="${paper.keywords}">
+            Research keywords
+        </div>
+
+    </section>
+
+
+    <!-- CITATION STATISTICS -->
+
+    <section class="detail-section">
+
+        <div class="detail-section-heading">
+            <span class="tag">05 / IMPACT</span>
+            <h2>Citation Statistics</h2>
+        </div>
+
+        <div class="detail-stat-grid">
+
+            <div class="detail-stat-card">
+                <span>INCOMING CITATIONS</span>
+                <strong th:text="${paper.incoming_citations}">0</strong>
+                <small>Times this paper was cited</small>
+            </div>
+
+            <div class="detail-stat-card">
+                <span>OUTGOING CITATIONS</span>
+                <strong th:text="${paper.outgoing_citations}">0</strong>
+                <small>References made by this paper</small>
+            </div>
+
+            <div class="detail-stat-card">
+                <span>TOTAL REVIEWS</span>
+                <strong th:text="${paper.total_reviews}">0</strong>
+                <small>Submitted paper reviews</small>
+            </div>
+
+            <div class="detail-stat-card">
+                <span>AVERAGE RATING</span>
+                <strong th:text="${paper.average_rating + ' / 5'}">
+                    0 / 5
+                </strong>
+                <small>Average reviewer score</small>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PAPERS CITED BY THIS PAPER -->
+
+    <section class="detail-section">
+
+        <div class="detail-section-heading">
+            <span class="tag">06 / REFERENCES</span>
+            <h2>Papers Cited by This Publication</h2>
+        </div>
+
+        <div class="detail-related-list"
+             th:if="${!#lists.isEmpty(citedPapers)}">
+
+            <a th:each="related : ${citedPapers}"
+               th:href="@{/papers/{id}(id=${related.paper_id})}"
+               class="detail-related-card">
+
+                <span class="related-number"
+                      th:text="${'#' + related.paper_id}">
+                    #2
+                </span>
+
+                <strong th:text="${related.paper_title}">
+                    Related Paper
+                </strong>
+
+                <span class="related-arrow">↗</span>
+
+            </a>
+
+        </div>
+
+        <p class="detail-empty"
+           th:if="${#lists.isEmpty(citedPapers)}">
+            This paper does not cite another paper in the current database.
+        </p>
+
+    </section>
+
+
+    <!-- PAPERS CITING THIS PAPER -->
+
+    <section class="detail-section">
+
+        <div class="detail-section-heading">
+            <span class="tag">07 / CITATION IMPACT</span>
+            <h2>Other Papers Citing This Publication</h2>
+        </div>
+
+        <div class="detail-related-list"
+             th:if="${!#lists.isEmpty(citingPapers)}">
+
+            <a th:each="related : ${citingPapers}"
+               th:href="@{/papers/{id}(id=${related.paper_id})}"
+               class="detail-related-card">
+
+                <span class="related-number"
+                      th:text="${'#' + related.paper_id}">
+                    #7
+                </span>
+
+                <strong th:text="${related.paper_title}">
+                    Citing Paper
+                </strong>
+
+                <span class="related-arrow">↗</span>
+
+            </a>
+
+        </div>
+
+        <p class="detail-empty"
+           th:if="${#lists.isEmpty(citingPapers)}">
+            No other paper cites this publication in the current database.
+        </p>
+
+    </section>
+
+
+    <!-- PAPER REVIEWS -->
+
+    <section class="detail-section">
+
+        <div class="detail-section-heading">
+            <span class="tag">08 / EVALUATION</span>
+            <h2>Paper Reviews</h2>
+        </div>
+
+        <div class="detail-review-list"
+             th:if="${!#lists.isEmpty(reviews)}">
+
+            <article class="detail-review-card"
+                     th:each="review : ${reviews}">
+
+                <div class="detail-review-header">
+
+                    <strong th:text="${review.reviewer_name}">
+                        Reviewer Name
+                    </strong>
+
+                    <span th:text="${review.review_date}">
+                        10 Feb 2026
+                    </span>
+
+                </div>
+
+                <div class="detail-review-rating">
+
+                    <span th:each="star : ${#numbers.sequence(1, 5)}"
+                          th:class="${star <= review.rating} ? 'star-filled' : 'star-empty'">
+                        ★
+                    </span>
+
+                    <strong th:text="${review.rating + '/5'}">
+                        5/5
+                    </strong>
+
+                </div>
+
+                <p th:text="${review.review_text}">
+                    Review comment
+                </p>
+
+            </article>
+
+        </div>
+
+        <p class="detail-empty"
+           th:if="${#lists.isEmpty(reviews)}">
+            No reviews have been submitted for this paper.
+        </p>
+
+    </section>
+
+
+    <a href="/papers" class="back-link bottom-back-link">
+        ← RETURN TO RESEARCH LIBRARY
+    </a>
+
+</main>
+
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+<script th:src="@{/js/theme.js}" defer></script>
+
+</body>
+</html>

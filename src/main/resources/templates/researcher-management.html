@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Researcher Management | KNOWLEDGEVAULT</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/researcher-management.css}">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+
+</head>
+
+<body>
+
+<div th:replace="~{fragments :: navbar('researchers')}"></div>
+
+<main class="researcher-management">
+
+    <!-- PAGE HEADING -->
+
+    <section class="management-heading">
+
+        <div>
+            <p class="management-label">
+                DATABASE ADMINISTRATION / RESEARCHERS
+            </p>
+
+            <h1>Researcher Management</h1>
+
+            <p class="management-description">
+                Manage researcher information in the KNOWLEDGEVAULT database.
+                Add new researchers, update existing profiles and manage records.
+            </p>
+        </div>
+
+        <a th:href="@{/researcher-management/new}"
+           class="management-add-button">
+            + Add Researcher
+        </a>
+
+    </section>
+
+
+    <!-- SUCCESS MESSAGE -->
+
+    <div class="management-alert success-alert"
+         th:if="${successMessage}"
+         th:text="${successMessage}">
+    </div>
+
+
+    <!-- ERROR MESSAGE -->
+
+    <div class="management-alert error-alert"
+         th:if="${errorMessage}"
+         th:text="${errorMessage}">
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+
+    <section class="management-summary">
+
+        <div class="summary-card">
+
+            <span class="summary-title">
+                TOTAL RESEARCHERS IN DATABASE
+            </span>
+
+            <strong th:text="${totalResearchers}">13</strong>
+
+            <span class="summary-note">
+                Total registered researcher records
+            </span>
+
+        </div>
+
+        <div class="summary-card">
+
+            <span class="summary-title">
+                CURRENT SEARCH RESULTS
+            </span>
+
+            <strong th:text="${#lists.size(researchers)}">13</strong>
+
+            <span class="summary-note">
+                Records matching your search
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- RESEARCHER TABLE -->
+
+    <section class="management-table-section">
+
+        <div class="management-table-heading">
+
+            <div>
+                <h2>Researcher Records</h2>
+
+                <p>
+                    Search and manage researcher information.
+                </p>
+            </div>
+
+            <span class="record-count"
+                  th:text="${#lists.size(researchers)} + ' RECORDS'">
+                13 RECORDS
+            </span>
+
+        </div>
+
+
+        <!-- SEARCH FORM -->
+
+        <form th:action="@{/researcher-management}"
+              method="get"
+              class="researcher-search-form">
+
+            <input
+                type="text"
+                name="search"
+                th:value="${searchTerm}"
+                placeholder="Search by ID, name, email or institution..."
+                aria-label="Search researchers">
+
+            <button type="submit">
+                Search
+            </button>
+
+            <a th:href="@{/researcher-management}">
+                Clear
+            </a>
+
+        </form>
+
+
+        <!-- TABLE -->
+
+        <div class="management-table-wrapper">
+
+            <table class="management-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>FULL NAME</th>
+                        <th>EMAIL ADDRESS</th>
+                        <th>INSTITUTION</th>
+                        <th>CREATED AT</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr th:each="researcher : ${researchers}">
+
+                        <td class="researcher-id"
+                            th:text="${researcher.researcher_id}">
+                            1
+                        </td>
+
+                        <td class="researcher-name"
+                            th:text="${researcher.full_name}">
+                            Researcher Name
+                        </td>
+
+                        <td th:text="${researcher.email}">
+                            researcher@example.com
+                        </td>
+
+                        <td th:text="${researcher.institution}">
+                            Institution
+                        </td>
+
+                        <td th:text="${researcher.created_at}">
+                            Created Date
+                        </td>
+
+                        <td class="management-actions">
+
+                            <a th:href="@{/researcher-management/edit/{id}(id=${researcher.researcher_id})}"
+                               class="management-edit-button">
+                                Edit
+                            </a>
+
+                            <form th:action="@{/researcher-management/delete/{id}(id=${researcher.researcher_id})}"
+                                  method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete this researcher?');">
+
+                                <button type="submit"
+                                        class="management-delete-button">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- NO RESULTS -->
+
+                    <tr th:if="${#lists.isEmpty(researchers)}">
+
+                        <td colspan="6" class="empty-records">
+                            No researchers match your search.
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <p class="management-footer-note">
+            KNOWLEDGEVAULT / RESEARCHER DATABASE MANAGEMENT
+        </p>
+
+    </section>
+
+</main>
+
+
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+</body>
+</html>

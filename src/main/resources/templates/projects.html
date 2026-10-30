@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Research Projects | KNOWLEDGEVAULT</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments :: navbar('projects')}"></div>
+
+<main class="project-page">
+
+    <!-- PAGE HEADING -->
+
+    <section class="project-heading">
+
+        <div class="project-heading-content">
+
+            <div class="tag">RESEARCH DIRECTORY / COLLABORATION</div>
+
+            <h1>Research <span class="accent">Projects.</span></h1>
+
+            <p>
+                Explore academic research projects, understand their
+                objectives, discover participating researchers and
+                examine collaborative research activities.
+            </p>
+
+        </div>
+
+        <a href="/project-management"
+           class="manage-project-button">
+            <span>+</span> MANAGE PROJECTS
+            <span class="manage-project-arrow">↗</span>
+        </a>
+
+    </section>
+
+
+    <!-- PROJECT SEARCH -->
+
+    <section class="project-search">
+
+        <form action="/projects" method="get" class="project-search-form">
+
+            <div class="project-search-input">
+
+                <span class="search-icon">⌕</span>
+
+                <input
+                    type="text"
+                    name="q"
+                    th:value="${searchTerm}"
+                    placeholder="Search project title, description or team member..."
+                    aria-label="Search projects">
+
+            </div>
+
+            <button type="submit" class="search-button">
+                Search →
+            </button>
+
+            <a href="/projects" class="clear-button">Clear</a>
+
+        </form>
+
+        <div class="search-information">
+
+            <span>DATABASE: KNOWLEDGEVAULT_DB</span>
+
+            <span>
+                PROJECTS FOUND:
+                <strong th:text="${totalProjects}">4</strong>
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROJECT DIRECTORY -->
+
+    <section class="project-results">
+
+        <div class="results-heading">
+
+            <div>
+                <div class="tag">● COLLABORATIVE RESEARCH</div>
+                <h2>Research Project Directory</h2>
+            </div>
+
+            <span class="results-count"
+                  th:text="${totalProjects + ' projects'}">
+                4 projects
+            </span>
+
+        </div>
+
+
+        <div class="project-grid"
+             th:if="${!#lists.isEmpty(projects)}">
+
+            <article class="project-card"
+                     th:each="project : ${projects}">
+
+                <div class="project-card-top">
+
+                    <span class="project-id">
+                        PROJECT ID:
+                        <span th:text="${project.project_id}">1</span>
+                    </span>
+
+                    <span class="project-status"
+                          th:classappend="${project.project_status == 'ONGOING'} ? ' status-ongoing' : (${project.project_status == 'UPCOMING'} ? ' status-upcoming' : ' status-completed')"
+                          th:text="${project.project_status}">
+                        ONGOING
+                    </span>
+
+                </div>
+
+
+                <div class="project-symbol">▤</div>
+
+
+                <h3 th:text="${project.project_title}">
+                    Research Project Title
+                </h3>
+
+
+                <div class="project-divider"></div>
+
+
+                <div class="project-description">
+
+                    <span class="information-label">
+                        PROJECT DESCRIPTION
+                    </span>
+
+                    <p th:text="${project.project_description}">
+                        Project description
+                    </p>
+
+                </div>
+
+
+                <div class="project-dates">
+
+                    <div>
+                        <span class="information-label">START DATE</span>
+                        <p th:text="${project.start_date}">01 Jan 2026</p>
+                    </div>
+
+                    <div>
+                        <span class="information-label">END DATE</span>
+                        <p th:text="${project.end_date}">Not specified</p>
+                    </div>
+
+                </div>
+
+
+                <div class="project-team">
+
+                    <span class="information-label">
+                        PROJECT TEAM MEMBERS
+                    </span>
+
+                    <p th:text="${project.team_members}">
+                        Researcher names and roles
+                    </p>
+
+                </div>
+
+
+                <div class="project-card-footer">
+
+                    <div class="project-members-count">
+
+                        <strong th:text="${project.total_members}">
+                            0
+                        </strong>
+
+                        <span>TEAM MEMBERS</span>
+
+                    </div>
+
+                    <span class="project-record">
+                        ● DATABASE RECORD
+                    </span>
+
+                </div>
+
+
+                <a class="project-detail-link"
+                   th:href="@{/projects/{id}(id=${project.project_id})}">
+                    VIEW PROJECT DETAILS →
+                </a>
+
+            </article>
+
+        </div>
+
+
+        <div class="empty-results"
+             th:if="${#lists.isEmpty(projects)}">
+
+            <div class="empty-icon">▤</div>
+
+            <h3>No research projects found</h3>
+
+            <p>
+                Try another project title, description or team member.
+            </p>
+
+            <a href="/projects" class="primary-button">
+                View All Projects
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- DATABASE INFORMATION -->
+
+    <section class="database-information">
+
+        <div class="database-info-icon">▤</div>
+
+        <div>
+            <h3>Research Collaboration Repository</h3>
+
+            <p>
+                Project details, team members, roles and project
+                dates are retrieved directly from MySQL.
+            </p>
+        </div>
+
+        <span class="database-status">● MYSQL CONNECTED</span>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+<script th:src="@{/js/theme.js}" defer></script>
+
+</body>
+</html>

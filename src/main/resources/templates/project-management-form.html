@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${formTitle} + ' | KNOWLEDGEVAULT'">
+        Project Form | KNOWLEDGEVAULT
+    </title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/project-management-form.css}">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+</head>
+
+<body>
+
+<div th:replace="~{fragments :: navbar('projects')}"></div>
+
+<main class="project-form-container">
+
+    <section class="project-form-heading">
+
+        <p class="project-management-label">
+            DATABASE ADMINISTRATION / RESEARCH PROJECTS
+        </p>
+
+        <h1 th:text="${formTitle}">Add Research Project</h1>
+
+        <p>
+            Enter the research project information below.
+            Provide a project title and start date.
+        </p>
+
+    </section>
+
+
+    <!-- ERROR MESSAGE -->
+
+    <div class="project-alert project-error"
+         th:if="${errorMessage}"
+         th:text="${errorMessage}">
+    </div>
+
+
+    <!-- PROJECT FORM -->
+
+    <section class="project-form-card">
+
+        <p class="project-form-section-label">
+            RESEARCH PROJECT INFORMATION
+        </p>
+
+        <form th:action="${formAction}" method="post">
+
+            <!-- PROJECT TITLE -->
+
+            <div class="project-form-group">
+
+                <label for="projectTitle">PROJECT TITLE *</label>
+
+                <input
+                    type="text"
+                    id="projectTitle"
+                    name="projectTitle"
+                    th:value="${projectTitle}"
+                    placeholder="Enter research project title"
+                    maxlength="200"
+                    minlength="2"
+                    required>
+
+                <small>
+                    Maximum 200 characters.
+                </small>
+
+            </div>
+
+
+            <!-- PROJECT DESCRIPTION -->
+
+            <div class="project-form-group">
+
+                <label for="projectDescription">
+                    PROJECT DESCRIPTION
+                </label>
+
+                <textarea
+                    id="projectDescription"
+                    name="projectDescription"
+                    th:text="${projectDescription}"
+                    placeholder="Describe the objectives and purpose of the research project"
+                    rows="7"></textarea>
+
+                <small>
+                    Provide a brief explanation of the project.
+                </small>
+
+            </div>
+
+
+            <!-- START DATE -->
+
+            <div class="project-form-group">
+
+                <label for="startDate">PROJECT START DATE *</label>
+
+                <input
+                    type="date"
+                    id="startDate"
+                    name="startDate"
+                    th:value="${startDate}"
+                    required>
+
+                <small>
+                    The start date is mandatory.
+                </small>
+
+            </div>
+
+
+            <!-- END DATE -->
+
+            <div class="project-form-group">
+
+                <label for="endDate">PROJECT END DATE</label>
+
+                <input
+                    type="date"
+                    id="endDate"
+                    name="endDate"
+                    th:value="${endDate}">
+
+                <small>
+                    Leave blank if the project is ongoing.
+                    End date cannot be earlier than start date.
+                </small>
+
+            </div>
+
+
+            <!-- FORM BUTTONS -->
+
+            <div class="project-form-actions">
+
+                <button
+                    type="submit"
+                    class="project-form-submit"
+                    th:text="${isEdit} ? 'Save Changes' : 'Add Project'">
+                    Add Project
+                </button>
+
+                <a
+                    th:href="@{/project-management}"
+                    class="project-form-cancel">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+
+        <div class="project-form-note">
+            DATABASE NOTE: Project ID is generated automatically.
+            Start date is required, while end date is optional.
+            Existing project team memberships are not modified by this form.
+        </div>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments :: siteFooter}"></div>
+
+</body>
+</html>
